@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Task Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1> Daily Task Manager</h1>
+            <p class="subtitle">Organize your day, one task at a time</p>
+        </header>
+
+        <!-- Add Task Section -->
+        <div class="add-task-section">
+            <input type="text" id="taskInput" placeholder="Enter a new task..." />
+            <button id="addTaskBtn">Add Task</button>
+        </div>
+
+        <!-- Pending Tasks -->
+        <section class="task-section">
+            <div class="section-header">
+                <h2> Pending Tasks</h2>
+                <span class="task-count" id="pendingCount">0</span>
+            </div>
+            <ul id="pendingList" class="task-list"></ul>
+        </section>
+
+        <!-- Completed Tasks -->
+        <section class="task-section">
+            <div class="section-header">
+                <h2> Completed Tasks</h2>
+                <span class="task-count" id="completedCount">0</span>
+            </div>
+            <ul id="completedList" class="task-list"></ul>
+        </section>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h3>Edit Task</h3>
+            <input type="text" id="editInput" />
+            <div class="modal-buttons">
+                <button id="saveEditBtn">Save</button>
+                <button id="cancelEditBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
