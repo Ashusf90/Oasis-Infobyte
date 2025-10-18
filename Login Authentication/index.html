@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        p {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .message {
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .switch-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .switch-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .switch-link a:hover {
+            text-decoration: underline;
+        }
+
+        .profile-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .profile-item {
+            margin-bottom: 15px;
+        }
+
+        .profile-item strong {
+            color: #555;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .profile-item span {
+            color: #333;
+            font-size: 16px;
+        }
+
+        .logout-btn {
+            background: #dc3545;
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Page -->
+        <div id="loginPage" class="page active">
+            <h1>Welcome Back</h1>
+            <p>Login to your account</p>
+            <div id="loginMessage" class="message"></div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+            <div class="switch-link">
+                Don't have an account? <a onclick="showPage('register')">Register</a>
+            </div>
+        </div>
+
+        <!-- Register Page -->
+        <div id="registerPage" class="page">
+            <h1>Create Account</h1>
+            <p>Register for a new account</p>
+            <div id="registerMessage" class="message"></div>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="registerUsername">Username</label>
+                    <input type="text" id="registerUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" required minlength="6">
+                </div>
+                <button type="submit">Register</button>
+            </form>
+            <div class="switch-link">
+                Already have an account? <a onclick="showPage('login')">Login</a>
+            </div>
+        </div>
+
+        <!-- Dashboard Page (Protected) -->
+        <div id="dashboardPage" class="page">
+            <h1>Dashboard</h1>
+            <p>Welcome, <span id="dashboardUsername"></span>!</p>
+            <div id="dashboardMessage" class="message"></div>
+            <div class="profile-info">
+                <div class="profile-item">
+                    <strong>User ID:</strong>
+                    <span id="profileId"></span>
+                </div>
+                <div class="profile-item">
+                    <strong>Username:</strong>
+                    <span id="profileUsername"></span>
+                </div>
+                <div class="profile-item">
+                    <strong>Email:</strong>
+                    <span id="profileEmail"></span>
+                </div>
+                <div class="profile-item">
+                    <strong>Member Since:</strong>
+                    <span id="profileCreated"></span>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        // Show message helper
+        function showMessage(elementId, message, type) {
+          const msgEl = document.getElementById(elementId);
+          msgEl.textContent = message;
+          msgEl.className = `message ${type}`;
+          msgEl.style.display = 'block';
+          setTimeout(() => (msgEl.style.display = 'none'), 4000);
+        }
+      
+        // Switch between pages
+        function showPage(page) {
+          document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+          document.getElementById(page + 'Page').classList.add('active');
+        }
+      
+        // REGISTER
+        document.getElementById('registerForm').addEventListener('submit', async e => {
+          e.preventDefault();
+          const username = document.getElementById('registerUsername').value;
+          const email = document.getElementById('registerEmail').value;
+          const password = document.getElementById('registerPassword').value;
+      
+          const res = await fetch('/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, email, password })
+          });
+      
+          const data = await res.json();
+          if (res.ok) {
+            showMessage('registerMessage', data.message, 'success');
+            setTimeout(() => showPage('login'), 2000);
+          } else {
+            showMessage('registerMessage', data.message, 'error');
+          }
+        });
+      
+        // LOGIN
+        document.getElementById('loginForm').addEventListener('submit', async e => {
+          e.preventDefault();
+          const email = document.getElementById('loginEmail').value;
+          const password = document.getElementById('loginPassword').value;
+      
+          const res = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+          });
+      
+          const data = await res.json();
+          if (res.ok) {
+            showMessage('loginMessage', data.message, 'success');
+            loadDashboard();
+          } else {
+            showMessage('loginMessage', data.message, 'error');
+          }
+        });
+      
+        // DASHBOARD
+        async function loadDashboard() {
+          const res = await fetch('/api/profile');
+          if (!res.ok) {
+            showPage('login');
+            return;
+          }
+      
+          const user = await res.json();
+          document.getElementById('dashboardUsername').textContent = user.username;
+          document.getElementById('profileId').textContent = user.id;
+          document.getElementById('profileUsername').textContent = user.username;
+          document.getElementById('profileEmail').textContent = user.email;
+          document.getElementById('profileCreated').textContent = new Date(user.createdAt).toLocaleDateString();
+          showPage('dashboard');
+        }
+      
+        // LOGOUT
+        async function logout() {
+          await fetch('/api/logout', { method: 'POST' });
+          showMessage('loginMessage', 'Logged out successfully', 'success');
+          showPage('login');
+        }
+      </script>
+      
+</body>
+</html>
